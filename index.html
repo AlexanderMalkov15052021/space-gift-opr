@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Three.js</title>
+  <link rel="icon" href="./icon/triangle.png">
+  <link rel="stylesheet" href="./style/style.css">
+  </link>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', 'Montserrat', 'Gilroy', 'Roboto', sans-serif;
+    }
+
+    /* Стили для поздравительных элементов поверх 3D */
+    .congrats-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 20px 30px 20px;
+      box-sizing: border-box;
+    }
+
+    .main-title {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.85) 0%, rgba(255, 105, 180, 0.8) 100%);
+      backdrop-filter: blur(12px);
+      border-radius: 80px;
+      padding: 12px 28px;
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.6), 0 8px 20px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 200, 0.6);
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      transform: translateY(0);
+      animation: floatGlow 3s infinite ease-in-out;
+    }
+
+    .main-title h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 6vw, 3.2rem);
+      background: linear-gradient(135deg, #fff8e7, #ffecb3, #ffe0a3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      font-weight: 900;
+    }
+
+    .main-title p {
+      margin: 5px 0 0;
+      font-size: clamp(0.75rem, 3vw, 1rem);
+      color: #FFF6E0;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .sub-glow {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 16px 32px;
+      border-left: 3px solid #ffaa44;
+      border-right: 3px solid #ff66cc;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .sub-glow h2 {
+      margin: 0;
+      font-size: clamp(1rem, 4vw, 1.7rem);
+      font-weight: 700;
+      color: #FFE6AA;
+      text-align: center;
+    }
+
+    .footer-congrats {
+      text-align: center;
+      background: rgba(10, 10, 25, 0.65);
+      backdrop-filter: blur(10px);
+      border-radius: 50px;
+      padding: 16px 32px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 200, 100, 0.5);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transform: translateY(0);
+      transition: all 0.2s;
+    }
+
+    .footer-congrats p {
+      margin: 0;
+      font-size: clamp(0.8rem, 3.5vw, 1.2rem);
+      font-weight: 600;
+      color: #FFDEAD;
+      letter-spacing: 1px;
+    }
+
+    .footer-congrats .company-name {
+      font-weight: 800;
+      color: #FFD966;
+      text-transform: uppercase;
+      background: linear-gradient(120deg, #FFD966, #FFB347);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 5px rgba(255, 180, 0, 0.5);
+    }
+
+    @keyframes floatGlow {
+      0% {
+        transform: translateY(0px);
+        text-shadow: 0 0 8px gold;
+      }
+
+      50% {
+        transform: translateY(-6px);
+        text-shadow: 0 0 20px #ffaa44;
+      }
+
+      100% {
+        transform: translateY(0px);
+        text-shadow: 0 0 8px #ff66cc;
+      }
+    }
+
+    /* Адаптация под мобильные устройства */
+    @media (max-width: 600px) {
+      .congrats-container {
+        padding: 12px 12px 20px 12px;
+      }
+
+      .main-title {
+        padding: 8px 16px;
+        margin-top: 8px;
+      }
+
+      .footer-congrats {
+        padding: 6px 18px;
+        margin-bottom: 8px;
+      }
+    }
+
+    /* Дополнительный блеск */
+    .sparkle {
+      position: absolute;
+      top: 20%;
+      right: 5%;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(255, 220, 100, 0.4) 0%, rgba(255, 200, 50, 0) 80%);
+      border-radius: 50%;
+      filter: blur(15px);
+      pointer-events: none;
+      animation: pulseGlow 4s infinite;
+    }
+
+    .sparkle-left {
+      left: 5%;
+      top: 70%;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(255, 100, 150, 0.3) 0%, rgba(255, 80, 120, 0) 80%);
+      animation: pulseGlow 5s infinite reverse;
+    }
+
+    @keyframes pulseGlow {
+      0% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+      }
+
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+    }
+
+    #info {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      color: rgba(255, 255, 255, 0.6);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+
+  <div class="congrats-container">
+        <div class="main-title">
+            <h1>🎉 ПОЗДРАВЛЯЕМ! 🎉</h1>
+            <div class="sub-glow">
+                <h2>Александр Филлипов</h2>
+                <h2>Руководитель отдела перспективных разработок</h2>
+            </div>
+            <p style="margin-top: 8px; font-size: 0.9rem;">✨ С инновационным драйвом &nbsp;|&nbsp; К новым высотам ✨</p>
+        </div>
+        
+        <div class="footer-congrats">
+            <p>🏆 Искренне гордимся достижениями! 🏆<br>
+            <span class="company-name">⭐ «БМС РУС» ⭐</span><br>
+            💎 Желаем блестящих идей, масштабных проектов и технологического превосходства 💎</p>
+        </div>
+        
+        <div class="sparkle"></div>
+        <div class="sparkle sparkle-left"></div>
+    </div>
+
+
+  <canvas id="canvas"></canvas>
+  <script type="text/javascript" src="./app/js/main.js"></script>
+</body>
+
+</html>
